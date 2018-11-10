@@ -1,0 +1,138 @@
+---
+title: "hw06"
+author: "Peiyuan Zhu"
+date: '2018-11-09'
+output: html_document
+---
+```{r}
+setwd("~/Desktop/hw05-garyzhubc")
+suppressPackageStartupMessages(require(tidyverse))
+suppressPackageStartupMessages(library(stringr))
+suppressPackageStartupMessages(library(gapminder))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(singer))
+```
+#1. Character data
+Read and work the exercises in the Strings chapter or R for Data Science
+##14.2.5 Exercises
+###1 
+paste0 is equivalent to str_c(.) and paste is equivalent to str_c(.,sep=""). paste and paste0 sees NA as string.
+```{r}
+paste("a","b")
+paste0("a","b")
+paste(NA,"b")
+paste0(NA,"b")
+str_c("a","b","c",sep = " ")
+```
+###2
+Sep seperates string between vectors; collapse connects the results in one.
+```{r}
+paste(c("a","b","c"),c("d","e","f"),sep="/")
+paste0(c("a","b","c"),c("d","e","f"),sep="/",collapse="-")
+```
+###3
+If even then change +1 to some other number, depending on how you define "the middle number"
+```{r}
+str_sub("abcde",str_length("abcde")/2+1,str_length("abcde")/2+1)
+```
+###4
+wrap string into paragraph
+```{r}
+cat(str_wrap("abb bbb cbb dbb",width = 10))
+```
+###5
+Trimout the white space in the front and at the end of the string
+```{r}
+str_trim(" abcde ")
+```
+###6
+```{r}
+cat_str <- function(string) {
+  if (length(string) == 1) {
+    return(string[1])
+  }
+  return(paste0(string[1],cat_str(string[2:length(string)])))
+} 
+cat_str(c("a","b","c"))
+```
+##14.3.1.1
+###1
+
+###2
+
+##14.3.2.1
+###1
+```{r}
+
+```
+###2
+```{r}
+str_view(stringr::words, "^y", match=TRUE)
+str_view(stringr::words, "x$", match=TRUE)
+str_view(stringr::words, "^...$", match=TRUE)
+str_view(stringr::words, "^.{7,}$", match=TRUE)
+```
+
+##14.3.3.1
+###1
+```{r}
+str_view(stringr::words, "^[aeiou]", match=TRUE)
+str_view(stringr::words, "^[^aeiou]", match=TRUE)
+str_view(stringr::words, "ed$|^eed$", match=TRUE)
+str_view(stringr::words, "ing$|ise$", match=TRUE)
+```
+###2
+```{r}
+
+```
+###3
+```{r}
+str_view(c("qu","qa"), "q[^u]", match=TRUE)
+```
+###4
+```{r}
+str_view(c("color","colour"), "ou", match=TRUE)
+```
+###5
+```{r}
+str_view(c(1604,86752), "1604", match=TRUE)
+```
+#14.3.4.1
+###1
+```{r}
+"{0,1}"
+"{1,}"
+"{0,}"
+```
+
+###2
+```{r}
+
+```
+
+###3
+```{r}
+
+```
+
+
+##14.3.5.1
+###1
+```{r}
+
+```
+###2
+```{r}
+
+```
+
+
+#2. Writing functions
+```{r}
+le_lin_fit <- function(dat, offset = 1952) {
+  the_fit <- MASS::rlm(lifeExp ~ I(year - offset), dat)
+  setNames(coef(the_fit), c("intercept", "slope"))
+}
+le_lin_fit(gapminder %>% filter(country == "Australia"))
+le_lin_fit(gapminder %>% filter(country == "China"))
+```
